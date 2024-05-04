@@ -1,2 +1,2 @@
-from .test_plugin import test_plugin
-test_plugin().register()
+from .DPAC_plugin import DPAC_plugin
+DPAC_plugin().register()
