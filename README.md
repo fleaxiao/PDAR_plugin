@@ -6,7 +6,7 @@ Design PCB Action Recorder (DPAC) is a plugin specifically designed for KiCad th
 
 ## Setup
 Launch KiCad and navigate to the folder where plugins are stored.
-    - Go to: `Kicad -> Tools -> External Plugins -> Open plugin Directory`
+- Go to: `Kicad -> Tools -> External Plugins -> Open plugin Directory`
 
 Open a terminal and change directory to the plugin folder:
 ```bash
@@ -19,7 +19,7 @@ git clone https://github.com/fleaxiao/DP_plugin.git
 ```
 
 Refresh your plugins in KiCad:
-    - Go to: Kicad -> Tools -> External Plugins -> Refresh Plugins.
+- Go to: `Kicad -> Tools -> External Plugins -> Refresh Plugins`
 
 The DPAC plugin should now be visible within the menu of KiCad.
 
