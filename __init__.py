@@ -1,2 +1,2 @@
-from .DPAC_plugin import DPAC_plugin
-DPAC_plugin().register()
+from .PDAC_plugin import PDAC_plugin
+PDAC_plugin().register()
