@@ -9,7 +9,7 @@ import json
 from .function import *
 from .tool import *
 
-class PDAC_plugin(pcbnew.ActionPlugin):
+class PDAR_plugin(pcbnew.ActionPlugin):
     def defaults(self):
         self.name = "PCB Design Action Recorder"
         self.category = "Export PCB actions"
