@@ -1,6 +1,6 @@
 # PCB Design Action Recorder
 
-PCB Design Action Recorder (PDAR) is a plugin specifically designed for KiCad that allows use to record their actions when designing PCB layout and export a `.json` file of each step.
+PCB Design Action Recorder (PDAR) is a plugin specifically designed for KiCad that allows user to record their actions when designing PCB layout and export a `.json` file of each step.
 
 PDAR and PCB Design Action Labeler (PDAL, https://github.com/fleaxiao/PDAL_plugin.git) are series plugins, which are recommend to use together, to fully log the human's thinking during PCB design process.
 
@@ -27,12 +27,12 @@ The PDAR plugin should now be visible in the menu of KiCad.
 
 ## Usage
 
-1. Open both schematic file and PCB layout file. Make sure the PCB layout is empty.
+1. Open both schematic file and PCB layout file. Make sure the PCB layout is empty. The footprints, tracks and vias are recommended to choose in the selection filter.
 
 2. `Initilization:`  The components from the schematic will be imported to the PCB layout design environment. 
 
-3. ``Start Record:`` The components of a Buck conveter will be intialized with random positions. The size of PCB board is fixed to `60mm x 60mm`.
+3. `Start Record:` The components of a Buck conveter will be intialized with random positions. The size of PCB board is fixed to `60mm x 60mm`.
 
-4. ``End Record:`` After manual design (select, move and rotate footprints; create tracks; place vias), a `.json` file containg a state squence of footprints, tracks, and vias will be exported.
+4. `End Record:` After manual design (select, move and rotate footprints; create tracks; place vias), a `.json` file containg a state squence of footprints, tracks, and vias will be exported.
 
-5. ``Abandon Record:`` The current design will be delected.
+5. `Abandon Record:` The current design will be delected.

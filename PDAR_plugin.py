@@ -130,41 +130,41 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         displaySize = wx.DisplaySize()
         self.frame.SetPosition((10, displaySize[1] - self.frame.GetSize()[1]-100))
 
-        # Set the icon
+        # Set icon
         icon = wx.Icon(os.path.join(os.path.dirname(__file__), 'icon.ico'), wx.BITMAP_TYPE_ICO)
         self.frame.SetIcon(icon)
 
-        # Set the image
+        # Set image
         image = wx.Image(os.path.join(os.path.dirname(__file__), 'tue.png'), wx.BITMAP_TYPE_ANY)
         image = image.Scale(100, 100, wx.IMAGE_QUALITY_HIGH)
         bitmap = wx.Bitmap(image)
         wx.StaticBitmap(self.frame, -1, bitmap, (50, 20))
 
-        # Create a StaticBitmap with the bitmap
+        # Create text
         self.text1 = wx.StaticText(self.frame, label = 'PCB Design Action Recorder   Copyright \u00A9 fleaxiao', pos = (130,150))
         self.text1.SetFont(wx.Font(6, wx.DECORATIVE, wx.NORMAL, wx.BOLD))
         self.text1.SetForegroundColour(wx.LIGHT_GREY)
 
-        self.text2 = wx.StaticText(self.frame, label = 'Record is ready', pos = (240,125), size = (140,10), style=wx.ALIGN_CENTER)
+        self.text2 = wx.StaticText(self.frame, label = 'PDAR is ready', pos = (50,125), size = (100,10), style=wx.ALIGN_CENTER)
         self.text2.SetFont(wx.Font(7, wx.DECORATIVE, wx.NORMAL, wx.BOLD))
         self.text2.SetForegroundColour(wx.RED)
         self.text2.SetWindowStyle(wx.ALIGN_CENTER) 
 
-        # Create first button
+        # Create button
         self.button1 = wx.Button(self.frame, label = 'Initialization', pos = (180,15), size=(260, 30))
         self.button1.Bind(wx.EVT_BUTTON, self.initialization)
 
-        self.line1 = wx.StaticLine(self.frame, pos=(185, 50), size=(240,1), style=wx.LI_HORIZONTAL)
-
-        self.button2 = wx.Button(self.frame, label = 'Start Record', pos = (180,55), size=(260, 30))
+        self.button2 = wx.Button(self.frame, label = 'Start Record', pos = (180,60), size=(260, 30))
         self.button2.Bind(wx.EVT_BUTTON, self.start_record)
 
-        self.button3 = wx.Button(self.frame, label = 'End Record', pos = (180,90), size=(130, 30))
+        self.button3 = wx.Button(self.frame, label = 'End Record', pos = (180,95), size=(130, 30))
         self.button3.Bind(wx.EVT_BUTTON, self.end_record)
 
-        self.button4 = wx.Button(self.frame, label = 'Abandon Record', pos = (310,90), size=(130, 30))
+        self.button4 = wx.Button(self.frame, label = 'Abandon Record', pos = (310,95), size=(130, 30))
         self.button4.Bind(wx.EVT_BUTTON, self.abandon_record)
 
+        # Create line
+        self.line1 = wx.StaticLine(self.frame, pos=(185, 52), size=(240,1), style=wx.LI_HORIZONTAL)
         self.line2 = wx.StaticLine(self.frame, pos=(40, 142), size=(120,1), style=wx.LI_HORIZONTAL)
         self.line3 = wx.StaticLine(self.frame, pos=(185, 142), size=(240,1), style=wx.LI_HORIZONTAL)
 
