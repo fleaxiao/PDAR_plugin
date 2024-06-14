@@ -92,8 +92,8 @@ class PDAR_plugin(pcbnew.ActionPlugin):
 
         now = datetime.now()
         time_string = now.strftime("%Y%m%d_%H%M%S")
-        # filename = 'PDA_' + time_string + '_record' + '.json' #? Add the current time to the filename
-        filename = 'PDA_record' + '.json' #? Keep the filename unchanged
+        filename = 'PDA_' + time_string + '_record' + '.json' #? Add the current time to the filename
+        # filename = 'PDA_record' + '.json' #? Keep the filename unchanged
         with open(filename, 'w') as file:
             file.write(record_data)
         
@@ -139,7 +139,7 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         self.text1.SetFont(wx.Font(6, wx.DECORATIVE, wx.NORMAL, wx.BOLD))
         self.text1.SetForegroundColour(wx.LIGHT_GREY)
 
-        self.text2 = wx.StaticText(self.frame, label = 'PDAR is ready', pos = (50,125), size = (100,10), style=wx.ALIGN_CENTER)
+        self.text2 = wx.StaticText(self.frame, label = 'PDAR is ready', pos = (40,125), size = (120,10), style=wx.ALIGN_CENTER)
         self.text2.SetFont(wx.Font(7, wx.DECORATIVE, wx.NORMAL, wx.BOLD))
         self.text2.SetForegroundColour(wx.RED)
         self.text2.SetWindowStyle(wx.ALIGN_CENTER) 
