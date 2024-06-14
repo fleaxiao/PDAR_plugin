@@ -158,9 +158,9 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         self.button4.Bind(wx.EVT_BUTTON, self.abandon_record)
 
         # Create line
-        self.line1 = wx.StaticLine(self.frame, pos=(185, 52), size=(240,1), style=wx.LI_HORIZONTAL)
+        self.line1 = wx.StaticLine(self.frame, pos=(188, 52), size=(240,1), style=wx.LI_HORIZONTAL)
         self.line2 = wx.StaticLine(self.frame, pos=(40, 142), size=(120,1), style=wx.LI_HORIZONTAL)
-        self.line3 = wx.StaticLine(self.frame, pos=(185, 142), size=(240,1), style=wx.LI_HORIZONTAL)
+        self.line3 = wx.StaticLine(self.frame, pos=(188, 142), size=(240,1), style=wx.LI_HORIZONTAL)
 
         self.frame.Show()
 
