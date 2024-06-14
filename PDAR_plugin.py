@@ -92,8 +92,8 @@ class PDAR_plugin(pcbnew.ActionPlugin):
 
         now = datetime.now()
         time_string = now.strftime("%Y%m%d_%H%M%S")
-        # filename = 'pcb_record_' + time_string + '.json' #? Add the current time to the filename
-        filename = 'pcb_record' + '.json' #? Keep the filename unchanged
+        # filename = 'PDA_' + time_string + '_record' + '.json' #? Add the current time to the filename
+        filename = 'PDA_record' + '.json' #? Keep the filename unchanged
         with open(filename, 'w') as file:
             file.write(record_data)
         
@@ -107,12 +107,6 @@ class PDAR_plugin(pcbnew.ActionPlugin):
 
         FLAG_RECORD = False
         RECORD_DESIGN = {}
-        # board: pcbnew.BOARD = pcbnew.GetBoard()
-        # for item in list(board.GetDrawings()):
-        #     if isinstance(item, pcbnew.PCB_SHAPE) and item.GetLayer() == pcbnew.Edge_Cuts:
-        #         board.Remove(item)
-        # for module in board.GetFootprints():
-        #     board.RemoveNative(module)
         pcbnew.Refresh()
 
         self.text2.SetLabel('Reocrd is abandoned!')
@@ -171,4 +165,3 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         self.frame.Show()
 
         return
-
