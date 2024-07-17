@@ -23,48 +23,83 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         global RECORD_DESIGN
 
         FLAG_RECORD = True
-        prev_module_status = pd.DataFrame()
-        prev_track_status = pd.DataFrame()
-        prev_via_status = pd.DataFrame()
+        self.prev_module_status = []
+        self.prev_track_status = []
+        self.prev_via_status = []
 
         while FLAG_RECORD:
             time.sleep(0.1)
             new_module_status, new_track_status, new_via_status = pcb_record()
 
-            if not new_module_status.equals(prev_module_status) or not new_track_status.equals(prev_track_status) or not new_via_status.equals(prev_via_status):
-                if not is_module_selected() and not is_track_selected():
-                    data_dict = new_module_status.to_dict('records')
+            if len(self.prev_module_status) == 0:
+                data_dict = new_module_status.to_dict('records')
+                for record in data_dict:
+                    module_ref = record.get('Module Reference')
 
-                    for record in data_dict:
-                        module_ref = record.get('Module Reference')
+                    if module_ref not in RECORD_DESIGN['Record']['Module']:
+                        RECORD_DESIGN['Record']['Module'][module_ref] = {'Position X': [], 'Position Y': [], 'Angle': []}
+                        RECORD_DESIGN['Footprint'][module_ref] = {'Width': record.get('Footprint Width'), 'Height': record.get('Footprint Height')}
 
-                        if module_ref not in RECORD_DESIGN['Module']:
-                            RECORD_DESIGN['Module'][module_ref] = {'Position X': [], 'Position Y': [], 'Angle': []}
+                    pos_x = record.get('Position X')
+                    pos_y = record.get('Position Y')
+                    angle = record.get('Angle')
 
-                        pos_x = record.get('Position X')
-                        pos_y = record.get('Position Y')
-                        angle = record.get('Angle')
+                    RECORD_DESIGN['Record']['Module'][module_ref]['Position X'].append(pos_x)
+                    RECORD_DESIGN['Record']['Module'][module_ref]['Position Y'].append(pos_y)
+                    RECORD_DESIGN['Record']['Module'][module_ref]['Angle'].append(angle)
+                
+                RECORD_DESIGN['Record']['Track']['Net'].append(new_track_status['Net'].tolist())
+                RECORD_DESIGN['Record']['Track']['Start X'].append(new_track_status['Start X'].tolist())
+                RECORD_DESIGN['Record']['Track']['Start Y'].append(new_track_status['Start Y'].tolist())
+                RECORD_DESIGN['Record']['Track']['End X'].append(new_track_status['End X'].tolist())
+                RECORD_DESIGN['Record']['Track']['End Y'].append(new_track_status['End Y'].tolist())
+                RECORD_DESIGN['Record']['Track']['Width'].append(new_track_status['Width'].tolist())
+                RECORD_DESIGN['Record']['Track']['Layer'].append(new_track_status['Layer'].tolist())
 
-                        RECORD_DESIGN['Module'][module_ref]['Position X'].append(pos_x)
-                        RECORD_DESIGN['Module'][module_ref]['Position Y'].append(pos_y)
-                        RECORD_DESIGN['Module'][module_ref]['Angle'].append(angle)
-                    
-                    RECORD_DESIGN['Track']['Net'].append(new_track_status['Net'].tolist())
-                    RECORD_DESIGN['Track']['Start X'].append(new_track_status['Start X'].tolist())
-                    RECORD_DESIGN['Track']['Start Y'].append(new_track_status['Start Y'].tolist())
-                    RECORD_DESIGN['Track']['End X'].append(new_track_status['End X'].tolist())
-                    RECORD_DESIGN['Track']['End Y'].append(new_track_status['End Y'].tolist())
-                    RECORD_DESIGN['Track']['Width'].append(new_track_status['Width'].tolist())
-                    RECORD_DESIGN['Track']['Layer'].append(new_track_status['Layer'].tolist())
+                RECORD_DESIGN['Record']['Via']['Net'].append(new_via_status['Net'].tolist())
+                RECORD_DESIGN['Record']['Via']['Position X'].append(new_via_status['Position X'].tolist())
+                RECORD_DESIGN['Record']['Via']['Position Y'].append(new_via_status['Position Y'].tolist())
+                RECORD_DESIGN['Record']['Via']['Diameter'].append(new_via_status['Diameter'].tolist())
 
-                    RECORD_DESIGN['Via']['Net'].append(new_via_status['Net'].tolist())
-                    RECORD_DESIGN['Via']['Position X'].append(new_via_status['Position X'].tolist())
-                    RECORD_DESIGN['Via']['Position Y'].append(new_via_status['Position Y'].tolist())
-                    RECORD_DESIGN['Via']['Diameter'].append(new_via_status['Diameter'].tolist())
+                self.prev_module_status.append(new_module_status)
+                self.prev_track_status.append(new_track_status)
+                self.prev_via_status.append(new_via_status)
 
-                    prev_module_status = new_module_status
-                    prev_track_status = new_track_status
-                    prev_via_status = new_via_status
+            else:
+                if not new_module_status.equals(self.prev_module_status[-1]) or not new_track_status.equals(self.prev_track_status[-1]) or not new_via_status.equals(self.prev_via_status[-1]):
+                    if not is_module_selected() and not is_track_selected():
+                        data_dict = new_module_status.to_dict('records')
+
+                        for record in data_dict:
+                            module_ref = record.get('Module Reference')
+
+                            if module_ref not in RECORD_DESIGN['Record']['Module']:
+                                RECORD_DESIGN['Record']['Module'][module_ref] = {'Position X': [], 'Position Y': [], 'Angle': []}
+
+                            pos_x = record.get('Position X')
+                            pos_y = record.get('Position Y')
+                            angle = record.get('Angle')
+
+                            RECORD_DESIGN['Record']['Module'][module_ref]['Position X'].append(pos_x)
+                            RECORD_DESIGN['Record']['Module'][module_ref]['Position Y'].append(pos_y)
+                            RECORD_DESIGN['Record']['Module'][module_ref]['Angle'].append(angle)
+                        
+                        RECORD_DESIGN['Record']['Track']['Net'].append(new_track_status['Net'].tolist())
+                        RECORD_DESIGN['Record']['Track']['Start X'].append(new_track_status['Start X'].tolist())
+                        RECORD_DESIGN['Record']['Track']['Start Y'].append(new_track_status['Start Y'].tolist())
+                        RECORD_DESIGN['Record']['Track']['End X'].append(new_track_status['End X'].tolist())
+                        RECORD_DESIGN['Record']['Track']['End Y'].append(new_track_status['End Y'].tolist())
+                        RECORD_DESIGN['Record']['Track']['Width'].append(new_track_status['Width'].tolist())
+                        RECORD_DESIGN['Record']['Track']['Layer'].append(new_track_status['Layer'].tolist())
+
+                        RECORD_DESIGN['Record']['Via']['Net'].append(new_via_status['Net'].tolist())
+                        RECORD_DESIGN['Record']['Via']['Position X'].append(new_via_status['Position X'].tolist())
+                        RECORD_DESIGN['Record']['Via']['Position Y'].append(new_via_status['Position Y'].tolist())
+                        RECORD_DESIGN['Record']['Via']['Diameter'].append(new_via_status['Diameter'].tolist())
+
+                        self.prev_module_status.append(new_module_status)
+                        self.prev_track_status.append(new_track_status)
+                        self.prev_via_status.append(new_via_status)
     
     def initialization(self, event):
         pcb_init()
@@ -75,12 +110,23 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         global RECORD_DESIGN
 
         random_placement()
-        RECORD_DESIGN = {'Module':{},
+        RECORD_DESIGN = {'Footprint':{},
+                         'Record':{
+                         'Module':{},
                          'Track':{'Net':[], 'Start X': [], 'Start Y': [], 'End X': [], 'End Y': [], 'Width': [], 'Layer': []},
-                         'Via':{'Net':[], 'Position X': [], 'Position Y': [], 'Diameter': []}}
+                         'Via':{'Net':[], 'Position X': [], 'Position Y': [], 'Diameter': []}}}
         thread = threading.Thread(target = self.record_loop).start()
 
         self.text2.SetLabel('Recording...')
+    
+    def undo(self, event):
+        global RECORD_DESIGN
+
+        RECORD_DESIGN['Record'] = delete_last_action(RECORD_DESIGN['Record'])
+        play_last_action(RECORD_DESIGN['Record'])
+        self.prev_module_status = self.prev_module_status[0:-1]
+        self.prev_track_status = self.prev_track_status[0:-1]
+        self.prev_via_status = self.prev_via_status[0:-1]
 
 
     def end_record(self, event):
@@ -92,8 +138,8 @@ class PDAR_plugin(pcbnew.ActionPlugin):
 
         now = datetime.now()
         time_string = now.strftime("%Y%m%d_%H%M%S")
-        filename = 'PDA_' + time_string + '_record' + '.json' #? Add the current time to the filename
-        # filename = 'PDA_record' + '.json' #? Keep the filename unchanged
+        # filename = 'PDA_' + time_string + '_record' + '.json' #? Add the current time to the filename
+        filename = 'PDA_record' + '.json' #? Keep the filename unchanged
         with open(filename, 'w') as file:
             file.write(record_data)
         
@@ -151,11 +197,14 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         self.button2 = wx.Button(self.frame, label = 'Start Record', pos = (180,60), size=(260, 30))
         self.button2.Bind(wx.EVT_BUTTON, self.start_record)
 
-        self.button3 = wx.Button(self.frame, label = 'End Record', pos = (180,95), size=(130, 30))
-        self.button3.Bind(wx.EVT_BUTTON, self.end_record)
+        self.button3 = wx.Button(self.frame, label = 'Undo', pos = (180,95), size=(80, 30))
+        self.button3.Bind(wx.EVT_BUTTON, self.undo)
 
-        self.button4 = wx.Button(self.frame, label = 'Abandon Record', pos = (310,95), size=(130, 30))
-        self.button4.Bind(wx.EVT_BUTTON, self.abandon_record)
+        self.button4 = wx.Button(self.frame, label = 'End', pos = (262,95), size=(96, 30))
+        self.button4.Bind(wx.EVT_BUTTON, self.end_record)
+
+        self.button5 = wx.Button(self.frame, label = 'Abandon', pos = (360,95), size=(80, 30))
+        self.button5.Bind(wx.EVT_BUTTON, self.abandon_record)
 
         # Create line
         self.line1 = wx.StaticLine(self.frame, pos=(188, 52), size=(240,1), style=wx.LI_HORIZONTAL)
