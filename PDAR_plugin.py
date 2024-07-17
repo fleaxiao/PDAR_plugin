@@ -111,10 +111,20 @@ class PDAR_plugin(pcbnew.ActionPlugin):
 
         random_placement()
         RECORD_DESIGN = {'Footprint':{},
+                         'Constraint':{
+                            'Power Module': [],
+                            'Sensitive Module': []
+                         },
                          'Record':{
-                         'Module':{},
-                         'Track':{'Net':[], 'Start X': [], 'Start Y': [], 'End X': [], 'End Y': [], 'Width': [], 'Layer': []},
-                         'Via':{'Net':[], 'Position X': [], 'Position Y': [], 'Diameter': []}}}
+                            'Module':{},
+                            'Track':{'Net':[], 'Start X': [], 'Start Y': [], 'End X': [], 'End Y': [], 'Width': [], 'Layer': []},
+                            'Via':{'Net':[], 'Position X': [], 'Position Y': [], 'Diameter': []}
+                            }
+                        }
+        if not str(self.text3.GetValue()) == 'Power Module':
+            RECORD_DESIGN['Constraint']['Power Module'] = str(self.text3.GetValue()).split()
+        if not str(self.text4.GetValue()) == 'Sensitive Module':
+            RECORD_DESIGN['Constraint']['Sensitive Module'] = str(self.text4.GetValue()).split()
         thread = threading.Thread(target = self.record_loop).start()
 
         self.text2.SetLabel('Recording...')
@@ -190,24 +200,28 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         self.text2.SetForegroundColour(wx.RED)
         self.text2.SetWindowStyle(wx.ALIGN_CENTER) 
 
+        self.text3 = wx.TextCtrl(self.frame, value="Power Module", pos = (180,52), size = (128, 25), style = wx.TE_CENTRE)
+
+        self.text4 = wx.TextCtrl(self.frame, value="Sensitive Module", pos = (310,52), size = (128, 25), style = wx.TE_CENTRE)
+
         # Create button
-        self.button1 = wx.Button(self.frame, label = 'Initialization', pos = (180,15), size=(260, 30))
+        self.button1 = wx.Button(self.frame, label = 'Initialization', pos = (180,15), size=(260, 25))
         self.button1.Bind(wx.EVT_BUTTON, self.initialization)
 
-        self.button2 = wx.Button(self.frame, label = 'Start Record', pos = (180,60), size=(260, 30))
+        self.button2 = wx.Button(self.frame, label = 'Start Record', pos = (180,80), size=(260, 25))
         self.button2.Bind(wx.EVT_BUTTON, self.start_record)
 
-        self.button3 = wx.Button(self.frame, label = 'Undo', pos = (180,95), size=(80, 30))
+        self.button3 = wx.Button(self.frame, label = 'Undo', pos = (180,108), size=(80, 25))
         self.button3.Bind(wx.EVT_BUTTON, self.undo)
 
-        self.button4 = wx.Button(self.frame, label = 'End', pos = (262,95), size=(96, 30))
+        self.button4 = wx.Button(self.frame, label = 'End', pos = (262,108), size=(96, 25))
         self.button4.Bind(wx.EVT_BUTTON, self.end_record)
 
-        self.button5 = wx.Button(self.frame, label = 'Abandon', pos = (360,95), size=(80, 30))
+        self.button5 = wx.Button(self.frame, label = 'Abandon', pos = (360,108), size=(80, 25))
         self.button5.Bind(wx.EVT_BUTTON, self.abandon_record)
 
         # Create line
-        self.line1 = wx.StaticLine(self.frame, pos=(188, 52), size=(240,1), style=wx.LI_HORIZONTAL)
+        self.line1 = wx.StaticLine(self.frame, pos=(188, 45), size=(240,1), style=wx.LI_HORIZONTAL)
         self.line2 = wx.StaticLine(self.frame, pos=(40, 142), size=(120,1), style=wx.LI_HORIZONTAL)
         self.line3 = wx.StaticLine(self.frame, pos=(188, 142), size=(240,1), style=wx.LI_HORIZONTAL)
 
