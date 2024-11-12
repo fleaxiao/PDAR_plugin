@@ -9,18 +9,8 @@ import pygetwindow as gw
 import time
 from .tool import *
 
-def pcb_init():
+def pcb_init(x1, y1, x2, y2):
     board: pcbnew.BOARD = pcbnew.GetBoard()
-
-    x1 = 40
-    y1 = 40
-    x2 = 100
-    y2 = 100
-    margin = 5
-    originX = pcbnew.FromMM(x1-margin)  
-    originY = pcbnew.FromMM(y1-margin)  
-    endX = pcbnew.FromMM(x2+margin) 
-    endY = pcbnew.FromMM(y2+margin)
 
     # Initialize the board
     for item in list(board.GetDrawings()):
@@ -28,10 +18,10 @@ def pcb_init():
             board.Remove(item)
     rectmodule_angle = pcbnew.PCB_SHAPE(board)
     rectmodule_angle.SetShape(pcbnew.SHAPE_T_RECT)
-    rectmodule_angle.SetStartX(originX)
-    rectmodule_angle.SetStartY(originY)
-    rectmodule_angle.SetEndX(endX)
-    rectmodule_angle.SetEndY(endY)
+    rectmodule_angle.SetStartX(pcbnew.FromMM(x1))
+    rectmodule_angle.SetStartY(pcbnew.FromMM(y1))
+    rectmodule_angle.SetEndX(pcbnew.FromMM(x2))
+    rectmodule_angle.SetEndY(pcbnew.FromMM(y2))
     rectmodule_angle.SetLayer(pcbnew.Edge_Cuts)
     board.Add(rectmodule_angle)
 
@@ -72,41 +62,55 @@ def pcb_init():
 
     pcbnew.Refresh()
 
-def random_placement():
+def module_init(x1, y1, x2, y2):
     board: pcbnew.BOARD = pcbnew.GetBoard()
 
-    x1 = 40
-    y1 = 40
-    x2 = 100
-    y2 = 100
+    i = 0
+    for module in board.GetFootprints():
+        module_pos_x_i, module_pos_y_i = get_module_init_pos(module)
+        if i == 0:
+            x = (x1 + x2) / 2 - 5
+            y = y2 + 15
+            module.SetPosition(pcbnew.VECTOR2I(pcbnew.wxPointMM(x, y)))
+
+            g_x = module_pos_x_i - x
+            g_y = module_pos_y_i - y
+        
+        else:
+            x = module_pos_x_i - g_x
+            y = module_pos_y_i - g_y
+            module.SetPosition(pcbnew.VECTOR2I(pcbnew.wxPointMM(x, y)))
+        i += 1
 
     for track in board.GetTracks():
         board.Delete(track)
 
-    for module in board.GetFootprints():
-        place_component(board, module, x1, y1, x2, y2)
-
     pcbnew.Refresh()
 
-def pcb_record():
+def pcb_record(x1, y1, x2, y2):
     board: pcbnew.BOARD = pcbnew.GetBoard()
 
     module_ref = list()
     module_pos_x = np.array([]).reshape(-1, 1)
     module_pos_y = np.array([]).reshape(-1, 1)
     module_angle = np.array([]).reshape(-1, 1)
-    module_footprint_w = np.array([]).reshape(-1, 1)
-    module_footprint_h = np.array([]).reshape(-1, 1)
+    pad_info = list()
+    footprint_w = np.array([]).reshape(-1, 1)
+    footprint_h = np.array([]).reshape(-1, 1)
+
     for module in board.GetFootprints():   
-        module_ref_i, module_pos_x_i, module_pos_y_i, module_angle_i, module_footprint_w_i, module_footprint_h_i = get_module_status(module)
+        module_ref_i, module_pos_x_i, module_pos_y_i, module_angle_i, footprint_w_i, footprint_h_i, pad_info_i = get_module_status(module, x1, y1, x2, y2)
         module_ref.append(module_ref_i)
         module_pos_x = np.append(module_pos_x, module_pos_x_i)
         module_pos_y = np.append(module_pos_y, module_pos_y_i)
         module_angle = np.append(module_angle, module_angle_i)
-        module_footprint_w = np.append(module_footprint_w, module_footprint_w_i)
-        module_footprint_h = np.append(module_footprint_h, module_footprint_h_i)
-    module_status = {'Module Reference': module_ref, 'Position X': module_pos_x, 'Position Y': module_pos_y, 'Angle': module_angle, \
-                     'Footprint Width': module_footprint_w, 'Footprint Height': module_footprint_h}
+        pad_info.append(pad_info_i)
+        footprint_w = np.append(footprint_w, footprint_w_i)
+        footprint_h = np.append(footprint_h, footprint_h_i)
+    footprint = {'Module Reference': module_ref,'Pad Info': pad_info,'Footprint Width': footprint_w, 'Footprint Height': footprint_h}
+    module_status = {'Module Reference': module_ref, 'Position X': module_pos_x, 'Position Y': module_pos_y, 'Angle': module_angle}
+    footprint = pd.DataFrame(footprint)
+    footprint = footprint.sort_values(by = ['Module Reference'])
     new_module_status = pd.DataFrame(module_status)
     new_module_status = new_module_status.sort_values(by = ['Module Reference'])    
 
@@ -163,7 +167,7 @@ def pcb_record():
     new_via_status = pd.DataFrame(via_status)
     new_via_status = new_via_status.sort_values(by = ['Position X', 'Position Y']) 
 
-    return new_module_status, new_track_status, new_via_status
+    return footprint, new_module_status, new_track_status, new_via_status
 
 def delete_last_action(RECORD_DESIGN):
     if isinstance(RECORD_DESIGN, dict):

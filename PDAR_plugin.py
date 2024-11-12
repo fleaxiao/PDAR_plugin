@@ -10,6 +10,8 @@ import json
 from .function import *
 from .tool import *
 
+from .PositionInit import position_init
+
 class PDAR_plugin(pcbnew.ActionPlugin):
     def defaults(self):
         self.name = "PCB Design Action Recorder"
@@ -29,16 +31,20 @@ class PDAR_plugin(pcbnew.ActionPlugin):
 
         while FLAG_RECORD:
             time.sleep(0.1)
-            new_module_status, new_track_status, new_via_status = pcb_record()
+            footprint, new_module_status, new_track_status, new_via_status = pcb_record(self.x1, self.y1, self.x2, self.y2)
 
             if len(self.prev_module_status) == 0:
+                data_dict = footprint.to_dict('records')
+                for record in data_dict:
+                    module_ref = record.get('Module Reference')
+                    if module_ref not in RECORD_DESIGN['Record']['Module']:
+                        RECORD_DESIGN['Footprint'][module_ref] = {'Width': record.get('Footprint Width'), 'Height': record.get('Footprint Height'), 'Pad': record.get('Pad Info')}
+
                 data_dict = new_module_status.to_dict('records')
                 for record in data_dict:
                     module_ref = record.get('Module Reference')
-
                     if module_ref not in RECORD_DESIGN['Record']['Module']:
                         RECORD_DESIGN['Record']['Module'][module_ref] = {'Position X': [], 'Position Y': [], 'Angle': []}
-                        RECORD_DESIGN['Footprint'][module_ref] = {'Width': record.get('Footprint Width'), 'Height': record.get('Footprint Height')}
 
                     pos_x = record.get('Position X')
                     pos_y = record.get('Position Y')
@@ -102,14 +108,16 @@ class PDAR_plugin(pcbnew.ActionPlugin):
                         self.prev_via_status.append(new_via_status)
     
     def initialization(self, event):
-        pcb_init()
+        pcb_init(self.x1, self.y1, self.x2, self.y2)
 
         self.text2.SetLabel('Environment is ready.')
 
     def start_record(self, event):
         global RECORD_DESIGN
 
-        random_placement()
+        position_init().Run()
+        module_init(self.x1, self.y1, self.x2, self.y2)
+
         RECORD_DESIGN = {'Footprint':{},
                          'Constraint':{
                             'Power Module': [],
@@ -146,10 +154,14 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         FLAG_RECORD = False
         record_data = json.dumps(RECORD_DESIGN, indent=4)
 
+        board = pcbnew.GetBoard()
         now = datetime.now()
+        _, pcb_file = os.path.split(board.GetFileName())
+        pcb_file_name = os.path.splitext(pcb_file)[0]
         time_string = now.strftime("%Y%m%d_%H%M%S")
-        # filename = 'PDA_' + time_string + '_record' + '.json' #? Add the current time to the filename
-        filename = 'PDA_record' + '.json' #? Keep the filename unchanged
+
+        # filename = pcb_file_name + time_string + '_record' + '.json' #? Add the current time to the filename
+        filename = pcb_file_name + '_record' + '.json' #? Keep the filename unchanged
         with open(filename, 'w') as file:
             file.write(record_data)
         
@@ -169,8 +181,14 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         
     def Run(self):
         board = pcbnew.GetBoard()
-        work_dir, in_pcb_file = os.path.split(board.GetFileName())
+        work_dir, _ = os.path.split(board.GetFileName())
         os.chdir(work_dir) # Change the working directory to the directory of the PCB file
+
+        # Set pcb board frame
+        self.x1 = 40
+        self.y1 = 50
+        self.x2 = 120
+        self.y2 = 100
 
         self.frame = wx.Frame(None, -1, style=wx.STAY_ON_TOP)
         self.frame.SetTitle("Design PCB Action Recorder")
