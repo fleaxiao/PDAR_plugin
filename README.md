@@ -1,8 +1,8 @@
-# ![icon](icon.png) PCB Design Action Recorder 
+# ![icon](icon.ico) PCB Design Action Recorder 
 
 PCB Design Action Recorder (PDAR) is a plugin specifically designed for KiCad that allows user to record their actions when designing PCB layout and export a `.json` file of each step.
 
-PDAR and PCB Design Action Labeler (PDAL, https://github.com/fleaxiao/PDAL_plugin.git) are series plugins, which are recommend to use together, to fully log the human's thinking during PCB design process.
+PDAR and PCB Design Action Labeler ([PDAL](https://github.com/fleaxiao/PDAL_plugin.git)) are series plugins, which are recommend to use together, to fully log the human's thinking during PCB design process.
 
  > **Note:** This plugin has only been tested with KiCad 7.0. It's likely incompatible with later versions.
 
