@@ -4,7 +4,7 @@ PCB Design Action Recorder (PDAR) is a plugin specifically designed for KiCad th
 
 PDAR and PCB Design Action Labeler (PDAL, https://github.com/fleaxiao/PDAL_plugin.git) are series plugins, which are recommend to use together, to fully log the human's thinking during PCB design process.
 
- **Note:** This plugin has only been tested with KiCad 7.0. It's likely incompatible with later versions.
+ > **Note:** This plugin has only been tested with KiCad 7.0. It's likely incompatible with later versions.
 
 ## Setup
 
@@ -41,3 +41,7 @@ The PDAR plugin should now be visible in the menu of KiCad.
 6. `Abandon Record:` The current design will be delected.
 
 7. The suggested grid is **0.01 in**, and the via is recommended to place before wiring to make sure that the track is connected to the center of via.
+
+## Contact
+
+If you have any questions, please contact me at x.yang2@tue.nl
