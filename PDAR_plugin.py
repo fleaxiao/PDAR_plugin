@@ -11,6 +11,7 @@ from .function import *
 from .tool import *
 
 from .PositionInit import position_init
+from .constant import *
 
 class PDAR_plugin(pcbnew.ActionPlugin):
     def defaults(self):
@@ -185,10 +186,10 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         os.chdir(work_dir) # Change the working directory to the directory of the PCB file
 
         # Set pcb board frame
-        self.x1 = 40
-        self.y1 = 50
-        self.x2 = 120
-        self.y2 = 100
+        self.x1 = START_X
+        self.y1 = START_Y
+        self.x2 = END_X
+        self.y2 = END_Y
 
         self.frame = wx.Frame(None, -1, style=wx.STAY_ON_TOP)
         self.frame.SetTitle("Design PCB Action Recorder")
