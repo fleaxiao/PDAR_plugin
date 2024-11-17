@@ -161,8 +161,8 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         pcb_file_name = os.path.splitext(pcb_file)[0]
         time_string = now.strftime("%Y%m%d_%H%M%S")
 
-        # filename = pcb_file_name + time_string + '_record' + '.json' #? Add the current time to the filename
-        filename = pcb_file_name + '_record' + '.json' #? Keep the filename unchanged
+        filename = pcb_file_name + '_' + time_string + '_record' + '.json' #? Add the current time to the filename
+        # filename = pcb_file_name + '_record' + '.json' #? Keep the filename unchanged
         with open(filename, 'w') as file:
             file.write(record_data)
         

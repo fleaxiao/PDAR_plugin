@@ -34,13 +34,17 @@ The PDAR plugin should now be visible in the menu of KiCad.
 
 3. `Power Module & Sensitive Module:` Type the references of the modules which are high-current and signal-sensitive. The references should be seperated by spaces.
 
-4. `Start Record:` The components of a Buck conveter will be intialized with random positions. The size of PCB board is fixed to `60mm x 60mm`.
+4. `Start Record:` The components of a Buck conveter will be intialized with random positions. The size of PCB board is configured in `constant.py`.
 
 5. `End Record:` After manual design (select, move and rotate footprints; create tracks; place vias), a `.json` file containg a state squence of footprints, tracks, and vias will be exported.
 
 6. `Abandon Record:` The current design will be delected.
 
 7. The suggested grid is **0.01 in**, and the via is recommended to place before wiring to make sure that the track is connected to the center of via.
+
+## Acknowledge
+
+The logo of this plugin is designed by bukeicon from Flaticon.
 
 ## Contact
 
