@@ -19,7 +19,7 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         self.category = "Export PCB actions"
         self.description = "Record the actions when designing PCB"
         self.show_toolbar_button = True
-        self.icon_file_name = os.path.join(os.path.dirname(__file__), 'icon.png')
+        self.icon_file_name = os.path.join(os.path.dirname(__file__), 'images/icon.png')
 
     def record_loop(self):
         global FLAG_RECORD
@@ -200,11 +200,11 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         self.frame.SetPosition((10, displaySize[1] - self.frame.GetSize()[1]-100))
 
         # Set icon
-        icon = wx.Icon(os.path.join(os.path.dirname(__file__), 'icon.ico'), wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(os.path.join(os.path.dirname(__file__), 'images/icon.ico'), wx.BITMAP_TYPE_ICO)
         self.frame.SetIcon(icon)
 
         # Set image
-        image = wx.Image(os.path.join(os.path.dirname(__file__), 'tue.png'), wx.BITMAP_TYPE_ANY)
+        image = wx.Image(os.path.join(os.path.dirname(__file__), 'images/tue.png'), wx.BITMAP_TYPE_ANY)
         image = image.Scale(100, 100, wx.IMAGE_QUALITY_HIGH)
         bitmap = wx.Bitmap(image)
         wx.StaticBitmap(self.frame, -1, bitmap, (50, 20))
