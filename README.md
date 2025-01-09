@@ -37,7 +37,7 @@ The PDAR plugin should now be visible in the menu of KiCad.
 
 4. `Start Record:` The components of a power converter will be initialized with random positions. The size of PCB board is configured in `constant.py`.
 
-5. `End Record:` After manual design (select, move and rotate footprints; create tracks; place vias), a `.json` file containing a state sequence of footprints, tracks, and vias will be exported.
+5. `End Record:` After manual design (select, move and rotate footprints; create tracks; place vias), a `.json` file containing a operation sequence of footprints, tracks, and vias will be exported.
 
 6. `Abandon Record:` The current design will be deleted.
 
