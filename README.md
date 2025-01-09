@@ -8,21 +8,22 @@ PDAR and PCB Design Action Labeler ([PDAL](https://github.com/fleaxiao/PDAL_plug
 
 ## Setup
 
-Please meet the requirement of package in requirement.yml. Launch KiCad and navigate to the folder where plugins are stored.
-- Go to: `Kicad -> Tools -> External Plugins -> Open plugin Directory`
+1. Launch `KiCad Command Prompt` and install the requirement of package in requirement.yml. 
 
-Open a terminal and change directory to the plugin folder:
-```bash
-cd [path-to-plugins-folder]
-```
+2. Launch `KiCad` and download plugin.
+    - Navigate to the folder where plugins are stored: `KiCad -> Tools -> External Plugins -> Open plugin Directory`
 
-Clone the PDAR_plugin repository:
-```bash
-git clone https://github.com/fleaxiao/PDAR_plugin.git
-```
+    - Open a terminal and change directory to the plugin folder:
+        ```bash
+        cd [path-to-plugins-folder]
+        ```
 
-Refresh your plugins in KiCad:
-- Go to: `Kicad -> Tools -> External Plugins -> Refresh Plugins`
+    - Clone the PDAR_plugin repository:
+        ```bash
+        git clone https://github.com/fleaxiao/PDAR_plugin.git
+        ```
+
+    - Refresh your plugins in KiCad: `KiCad -> Tools -> External Plugins -> Refresh Plugins`
 
 The PDAR plugin should now be visible in the menu of KiCad.
 
@@ -30,15 +31,15 @@ The PDAR plugin should now be visible in the menu of KiCad.
 
 1. Open both schematic file and PCB layout file. Make sure the PCB layout is empty. The footprints, tracks and vias are recommended to choose in the selection filter.
 
-2. `Initilization:`  The components from the schematic will be imported to the PCB layout design environment. 
+2. `Initialization:`  The components from the schematic will be imported to the PCB layout design environment. 
 
-3. `Power Module & Sensitive Module:` Type the references of the modules which are high-current and signal-sensitive. The references should be seperated by spaces.
+3. `Power Module & Sensitive Module:` Type the references of the modules which are high-current and signal-sensitive. The references should be separated by spaces.
 
-4. `Start Record:` The components of a Buck conveter will be intialized with random positions. The size of PCB board is configured in `constant.py`.
+4. `Start Record:` The components of a Buck converter will be initialized with random positions. The size of PCB board is configured in `constant.py`.
 
-5. `End Record:` After manual design (select, move and rotate footprints; create tracks; place vias), a `.json` file containg a state squence of footprints, tracks, and vias will be exported.
+5. `End Record:` After manual design (select, move and rotate footprints; create tracks; place vias), a `.json` file containing a state sequence of footprints, tracks, and vias will be exported.
 
-6. `Abandon Record:` The current design will be delected.
+6. `Abandon Record:` The current design will be deleted.
 
 7. The suggested grid is **0.01 in**, and the via is recommended to place before wiring to make sure that the track is connected to the center of via.
 

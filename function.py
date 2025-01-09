@@ -7,7 +7,9 @@ import random
 import pyautogui
 import pygetwindow as gw
 import time
+
 from .tool import *
+
 
 def pcb_init(x1, y1, x2, y2):
     board: pcbnew.BOARD = pcbnew.GetBoard()
@@ -71,7 +73,8 @@ def module_init(x1, y1, x2, y2):
         if i == 0:
             x = (x1 + x2) / 2 - 5
             y = y2 + 15
-            module.SetPosition(pcbnew.VECTOR2I(pcbnew.wxPointMM(x, y)))
+            # module.SetPosition(pcbnew.VECTOR2I(pcbnew.wxPointMM(x, y)))
+            module.SetPosition(pcbnew.VECTOR2I(int(pcbnew.FromMM(x)), int(pcbnew.FromMM(y))))
 
             g_x = module_pos_x_i - x
             g_y = module_pos_y_i - y
@@ -79,7 +82,8 @@ def module_init(x1, y1, x2, y2):
         else:
             x = module_pos_x_i - g_x
             y = module_pos_y_i - g_y
-            module.SetPosition(pcbnew.VECTOR2I(pcbnew.wxPointMM(x, y)))
+            # module.SetPosition(pcbnew.VECTOR2I(pcbnew.wxPointMM(x, y)))
+            module.SetPosition(pcbnew.VECTOR2I(int(pcbnew.FromMM(x)), int(pcbnew.FromMM(y))))
         i += 1
 
     for track in board.GetTracks():

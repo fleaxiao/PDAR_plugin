@@ -7,11 +7,12 @@ import time
 from datetime import datetime
 import threading
 import json
+
 from .function import *
 from .tool import *
-
 from .PositionInit import position_init
 from .constant import *
+
 
 class PDAR_plugin(pcbnew.ActionPlugin):
     def defaults(self):
