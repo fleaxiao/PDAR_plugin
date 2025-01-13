@@ -1,7 +1,8 @@
-Name: PDAL
+Name: PDAR
 dependencies:
   - python=3.8
   - pip:
+    - numpy
     - pandas
     - pyautogui
     - pygetwindow
