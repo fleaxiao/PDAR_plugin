@@ -29,10 +29,10 @@ def pcb_init(x1, y1, x2, y2):
 
     # Initialize the components
     ## Import the footprints from the schematic
-    windows = gw.getWindowsWithTitle('PCB Editor')
+    windows = gw.getWindowsWithTitle('PCB Editor') + gw.getWindowsWithTitle('PCB 编辑器')
     pcb_editor_window = None
     for window in windows:
-        if window.title.endswith('PCB Editor'):
+        if window.title.endswith('PCB Editor') or window.title.endswith('PCB 编辑器'):
             pcb_editor_window = window
             break
     if pcb_editor_window:
