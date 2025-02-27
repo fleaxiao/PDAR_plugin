@@ -178,6 +178,12 @@ def delete_last_action(RECORD_DESIGN):
         return {k: delete_last_action(v) for k, v in RECORD_DESIGN.items()}
     else:
         return RECORD_DESIGN[0:-1]
+    
+def extract_last_action(RECORD_DESIGN):
+    if isinstance(RECORD_DESIGN, dict):
+        return {k: extract_last_action(v) for k, v in RECORD_DESIGN.items()}
+    else:
+        return RECORD_DESIGN[-1]
 
 def play_last_action(RECORD_DESIGN):
     board = pcbnew.GetBoard()

@@ -154,7 +154,11 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         global RECORD_DESIGN
 
         FLAG_RECORD = False
+        OUTPUT_DESIGN = RECORD_DESIGN
+        OUTPUT_DESIGN['Record'] = extract_last_action(RECORD_DESIGN['Record'])
+
         record_data = json.dumps(RECORD_DESIGN, indent=4)
+        output_data = json.dumps(OUTPUT_DESIGN, indent=4)
 
         board = pcbnew.GetBoard()
         now = datetime.now()
@@ -162,10 +166,14 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         pcb_file_name = os.path.splitext(pcb_file)[0]
         time_string = now.strftime("%Y%m%d_%H%M%S")
 
-        filename = pcb_file_name + '_' + time_string + '_record' + '.json' #? Add the current time to the filename
-        # filename = pcb_file_name + '_record' + '.json' #? Keep the filename unchanged
-        with open(filename, 'w') as file:
+        record_filename = pcb_file_name + '_' + time_string + '_record' + '.json' #? Add the current time to the filename
+        # record_filename = pcb_file_name + '_record' + '.json' #? Keep the filename unchanged
+        with open(record_filename, 'w') as file:
             file.write(record_data)
+        output_filename = pcb_file_name + '_' + time_string + '_output' + '.json' #? Add the current time to the filename
+        # output_filename = pcb_file_name + '_output' + '.json' #? Keep the filename unchanged
+        with open(output_filename, 'w') as file:
+            file.write(output_data)
         
         RECORD_DESIGN = {}
 
