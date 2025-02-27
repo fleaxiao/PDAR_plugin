@@ -7,6 +7,7 @@ import time
 from datetime import datetime
 import threading
 import json
+import copy
 
 from .function import *
 from .tool import *
@@ -154,7 +155,7 @@ class PDAR_plugin(pcbnew.ActionPlugin):
         global RECORD_DESIGN
 
         FLAG_RECORD = False
-        OUTPUT_DESIGN = RECORD_DESIGN
+        OUTPUT_DESIGN = copy.deepcopy(RECORD_DESIGN)
         OUTPUT_DESIGN['Record'] = extract_last_action(RECORD_DESIGN['Record'])
 
         record_data = json.dumps(RECORD_DESIGN, indent=4)
